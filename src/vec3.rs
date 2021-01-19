@@ -13,8 +13,12 @@ impl Vec3 {
         Vec3 {x, y, z}
     }
 
-    fn length(&self) -> f32 {
+    pub fn length(&self) -> f32 {
         (self.x.powi(2) + self.y.powi(2) + self.z.powi(2)).sqrt()
+    }
+
+    pub fn length_squared(&self) -> f32 {
+        self.x.powi(2) + self.y.powi(2) + self.z.powi(2)
     }
 }
 
