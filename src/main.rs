@@ -1,3 +1,6 @@
+mod vec3;
+use vec3::{write_color, Color};
+
 fn main() {
     // Image
     let image_width = 256;
@@ -6,16 +9,15 @@ fn main() {
     // Render
     println!("P3\n{} {}\n255", image_width, image_height);
     for h in (0..image_height).rev() {
+        eprintln!("\r Scanlines remaining: {}", h);
         for w in 0..image_width {
-            let r = (w as f32) / (image_width - 1) as f32;
-            let g = (h as f32) / (image_height - 1) as f32;
-            let b = 0.25;
-
-            let ir = (255.999 * r) as u32;
-            let ig = (255.999 * g) as u32;
-            let ib = (255.999 * b) as u32;
-
-            println!("{} {} {}", ir, ig, ib);
+            let pixel_color = Color {
+                x: (w as f32) / (image_width - 1) as f32,
+                y: (h as f32) / (image_height - 1) as f32,
+                z: 0.25,
+            };
+            write_color(pixel_color);
         }
     }
+    eprintln!("Done");
 }
