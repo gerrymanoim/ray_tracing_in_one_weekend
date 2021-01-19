@@ -7,32 +7,33 @@ use vec3::{dot, unit_vector, write_color, Color, Point3, Vec3};
 /// 0 roots - no sphere
 /// 1 root - edge
 /// 2 roots - through the sphere
-fn hit_sphere(center: Point3, radius: f32, r: &Ray) -> bool {
+fn hit_sphere(center: Point3, radius: f32, r: &Ray) -> f32 {
     let oc = r.origin - center;
     let a = dot(&r.direction, &r.direction);
     let b = 2.0 * dot(&oc, &r.direction);
     let c = dot(&oc, &oc) - radius * radius;
 
-    let discriminant = b * b - 4.0 * a * c;
-
-    discriminant > 0.0
+    let discriminant = b.powi(2) - 4.0 * a * c;
+    if discriminant < 0.0 {
+        return -1.0;
+    } else {
+        return (-b - discriminant.sqrt()) / (2.0 * a);
+    }
 }
 
-/// returns the color of the background (a simple gradient)
+/// returns the color where the ray intersects the plane
 fn ray_color(r: &Ray) -> Color {
-    if hit_sphere(
-        Point3 {
-            x: 0.0,
-            y: 0.0,
-            z: -1.0,
-        },
-        0.5,
-        r,
-    ) {
-        return Color::new(1.0, 0.0, 0.0);
+    let sphere_center = Point3::new(0.0, 0.0, -1.0);
+    let mut t = hit_sphere(sphere_center, 0.5, r);
+    if t > 0.0 {
+        // if we're in the sphere just interpolate the colors
+
+        // a unit vector pointing perpendicular to the surface
+        let n = unit_vector(r.at(t) - sphere_center);
+        return 0.5 * Color::new(n.x + 1.0, n.y + 1.0, n.z + 1.0);
     }
     let unit_direction = unit_vector(r.direction);
-    let t = 0.5 * (unit_direction.y + 1.0);
+    t = 0.5 * (unit_direction.y + 1.0);
     // lintear blend/interpolation
     // blend between startValue and endValue
     // blendedVale = (1-t)*startValue + t*endValue
