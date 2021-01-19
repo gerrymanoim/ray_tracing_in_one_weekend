@@ -155,7 +155,7 @@ pub fn unit_vector(v: Vec3) -> Vec3 {
     v / v.length()
 }
 
-use Vec3 as Point3;
+pub use Vec3 as Point3;
 pub use Vec3 as Color;
 
 // TODO - do this differently?
