@@ -7,7 +7,7 @@ use hittable::Hittable;
 use hittable_list::HittableList;
 use ray::Ray;
 use sphere::Sphere;
-use vec3::{dot, unit_vector, write_color, Color, Point3, Vec3};
+use vec3::{unit_vector, write_color, Color, Point3, Vec3};
 
 /// returns the color where the ray intersects the plane
 fn ray_color<T: Hittable>(r: &Ray, world: T) -> Color {

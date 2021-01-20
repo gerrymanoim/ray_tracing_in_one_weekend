@@ -9,14 +9,6 @@ pub struct HitRecord {
 }
 
 impl HitRecord {
-    fn new(p: Point3, normal: Vec3, t: f32) -> Self {
-        HitRecord {
-            p,
-            normal,
-            t,
-            front_face: false,
-        }
-    }
     // TODO better name
     // TODO docstring this
     pub fn from_t_ray_outward_normal(t: f32, r: &Ray, outward_normal: &Vec3) -> Self {

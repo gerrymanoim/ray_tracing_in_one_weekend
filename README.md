@@ -10,5 +10,3 @@ Using `convert image.ppm imgage.png`.
 
 
 ## TODO
-
-- [ ] Check implementation of sphere, colors do not match https://raytracing.github.io/images/img-1.05-normals-sphere-ground.png
