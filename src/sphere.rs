@@ -1,6 +1,6 @@
-use super::hittable::{HitRecord, Hittable};
-use super::ray::Ray;
-use super::vec3::{dot, Point3};
+use crate::hittable::{HitRecord, Hittable};
+use crate::ray::Ray;
+use crate::vec3::{dot, Point3};
 
 pub struct Sphere {
     center: Point3,

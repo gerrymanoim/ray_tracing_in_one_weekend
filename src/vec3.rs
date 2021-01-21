@@ -164,14 +164,3 @@ pub fn unit_vector(v: Vec3) -> Vec3 {
 }
 
 pub use Vec3 as Point3;
-pub use Vec3 as Color;
-
-// TODO - do this differently?
-// we also aren't taking in the io stream...
-pub fn write_color(c: Color) {
-    let ir = (255.999 * c.x) as u32;
-    let ig = (255.999 * c.y) as u32;
-    let ib = (255.999 * c.z) as u32;
-
-    println!("{} {} {}", ir, ig, ib);
-}

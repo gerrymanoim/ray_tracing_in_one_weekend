@@ -1,5 +1,5 @@
-use super::ray::Ray;
-use super::vec3::{dot, Point3, Vec3};
+use crate::ray::Ray;
+use crate::vec3::{dot, Point3, Vec3};
 
 pub struct HitRecord {
     p: Point3,

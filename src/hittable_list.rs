@@ -1,5 +1,5 @@
-use super::hittable::{HitRecord, Hittable};
-use super::ray::Ray;
+use crate::hittable::{HitRecord, Hittable};
+use crate::ray::Ray;
 use std::rc::Rc;
 
 #[derive(Clone)]
