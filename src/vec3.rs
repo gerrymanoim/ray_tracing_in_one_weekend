@@ -1,6 +1,8 @@
 use std::fmt;
 use std::ops::{Add, AddAssign, Div, DivAssign, Index, Mul, MulAssign, Neg, Sub};
 
+use rand::prelude::*;
+
 #[derive(Debug, Clone, Copy)] // TODO - do we need all of these
 pub struct Vec3 {
     pub x: f32,
@@ -10,7 +12,7 @@ pub struct Vec3 {
 
 impl Vec3 {
     pub fn new(x: f32, y: f32, z: f32) -> Vec3 {
-        Vec3 {x, y, z}
+        Vec3 { x, y, z }
     }
 
     pub fn length(&self) -> f32 {
@@ -19,6 +21,21 @@ impl Vec3 {
 
     pub fn length_squared(&self) -> f32 {
         self.x.powi(2) + self.y.powi(2) + self.z.powi(2)
+    }
+
+    pub fn random() -> Vec3 {
+        Vec3 {
+            x: random(),
+            y: random(),
+            z: random(),
+        }
+    }
+    pub fn bounded_random(rng: &mut impl Rng, min: f32, max: f32) -> Vec3 {
+        Vec3 {
+            x: rng.gen_range(min..max),
+            y: rng.gen_range(min..max),
+            z: rng.gen_range(min..max),
+        }
     }
 }
 
@@ -161,6 +178,17 @@ pub fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
 
 pub fn unit_vector(v: Vec3) -> Vec3 {
     v / v.length()
+}
+
+pub fn random_in_unit_sphere() -> Vec3 {
+    let mut rng = rand::thread_rng();
+
+    loop {
+        let v = Vec3::bounded_random(&mut rng, -1.0, 1.0);
+        if v.length_squared() < 1.0 {
+            return v
+        }
+    }
 }
 
 pub use Vec3 as Point3;

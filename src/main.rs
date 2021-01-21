@@ -9,16 +9,25 @@ use hittable::Hittable;
 use hittable_list::HittableList;
 use ray::Ray;
 use sphere::Sphere;
-use vec3::{unit_vector, Point3, Vec3};
+use vec3::{unit_vector, Point3, random_in_unit_sphere};
 use camera::{Camera};
 use color::{Color, write_color};
 
-use rand::Rng;
+use rand::prelude::*;
+// use rayon::prelude::*;
+// tried a parallel task for samples for pixel but had issues with rc
 
 /// returns the color where the ray intersects the plane
-fn ray_color<T: Hittable>(r: &Ray, world: T) -> Color {
-    match world.hit(r, 0.0, f32::INFINITY) {
-        Some(hr) => return 0.5 * (hr.normal + Color::new(1.0, 1.0, 1.0)),
+fn ray_color<T: Hittable>(r: &Ray, world: T, depth: u32) -> Color {
+    if depth == 0 {
+        return Color::new(0.0, 0.0, 0.0)
+    }
+    match world.hit(r, 0.001, f32::INFINITY) {
+        Some(hr) => {
+            let target = hr.p + hr.normal + random_in_unit_sphere();
+            let scatter_ray = Ray::new(hr.p, target - hr.p);
+            return 0.5 * ray_color(&scatter_ray, world, depth - 1);
+        },
         None => {
             let unit_direction = unit_vector(r.direction);
             let t = 0.5 * (unit_direction.y + 1.0);
@@ -28,14 +37,13 @@ fn ray_color<T: Hittable>(r: &Ray, world: T) -> Color {
 }
 
 fn main() {
-    let mut rng = rand::thread_rng();
-
     // Image
     // easier to not flip x, y if we use rectangle
     let aspect_ratio = 16.0 / 9.0;
     let image_width = 400;
     let image_height = (image_width as f32 / aspect_ratio) as u32;
     let samples_per_pixel = 100;
+    let max_depth = 50;
 
     // World
     let mut world = HittableList::new();
@@ -62,11 +70,11 @@ fn main() {
 
             for s in 0..samples_per_pixel {
                 // where are we on the horizonal plane
-                let u = (w as f32 + rng.gen::<f32>()) / (image_width - 1) as f32;
+                let u = (w as f32 + random::<f32>()) / (image_width - 1) as f32;
                 // where are we on the veritcal plane
-                let v = (h  as f32 + rng.gen::<f32>()) / (image_height - 1)  as f32;
+                let v = (h  as f32 + random::<f32>()) / (image_height - 1)  as f32;
                 let r = cam.get_ray(u, v);
-                pixel_color += ray_color(&r, &world);
+                pixel_color += ray_color(&r, &world, max_depth);
             }
 
             write_color(pixel_color, samples_per_pixel);
