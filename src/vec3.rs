@@ -191,4 +191,8 @@ pub fn random_in_unit_sphere() -> Vec3 {
     }
 }
 
+pub fn random_unti_vector() -> Vec3 {
+    unit_vector(random_in_unit_sphere())
+}
+
 pub use Vec3 as Point3;

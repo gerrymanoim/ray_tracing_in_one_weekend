@@ -9,7 +9,7 @@ use hittable::Hittable;
 use hittable_list::HittableList;
 use ray::Ray;
 use sphere::Sphere;
-use vec3::{unit_vector, Point3, random_in_unit_sphere};
+use vec3::{unit_vector, Point3, random_unti_vector};
 use camera::{Camera};
 use color::{Color, write_color};
 
@@ -24,7 +24,7 @@ fn ray_color<T: Hittable>(r: &Ray, world: T, depth: u32) -> Color {
     }
     match world.hit(r, 0.001, f32::INFINITY) {
         Some(hr) => {
-            let target = hr.p + hr.normal + random_in_unit_sphere();
+            let target = hr.p + hr.normal + random_unti_vector();
             let scatter_ray = Ray::new(hr.p, target - hr.p);
             return 0.5 * ray_color(&scatter_ray, world, depth - 1);
         },
