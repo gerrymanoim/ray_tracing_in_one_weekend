@@ -13,9 +13,8 @@ impl HittableList {
             objects: Vec::new(),
         }
     }
-    //alternatively I could pass the lifetime around?
-    pub fn add<T: Hittable + 'static>(&mut self, other: T) {
-        self.objects.push(Rc::new(other));
+    pub fn add(&mut self, other: Rc<dyn Hittable>) {
+        self.objects.push(other);
     }
 }
 

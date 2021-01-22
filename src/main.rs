@@ -17,7 +17,7 @@ use std::rc::Rc;
 use vec3::{random_unit_vector, unit_vector, Point3};
 
 use rand::prelude::*;
-// use rayon::prelude::*;
+use rayon::prelude::*;
 // tried a parallel task for samples for pixel but had issues with rc
 
 /// returns the color where the ray intersects the plane
@@ -74,26 +74,26 @@ fn main() {
     });
 
     // Objects in the world
-    world.add(Sphere::new(
+    world.add(Rc::new(Sphere::new(
         Point3::new(0.0, -100.5, -1.0),
         100.0,
         material_ground,
-    ));
-    world.add(Sphere::new(
+    )));
+    world.add(Rc::new(Sphere::new(
         Point3::new(0.0, 0.0, -1.0),
         0.5,
         material_center,
-    ));
-    world.add(Sphere::new(
+    )));
+    world.add(Rc::new(Sphere::new(
         Point3::new(-1.0, 0.0, -1.0),
         0.5,
         material_left,
-    ));
-    world.add(Sphere::new(
+    )));
+    world.add(Rc::new(Sphere::new(
         Point3::new(1.0, 0.0, -1.0),
         0.5,
         material_right,
-    ));
+    )));
 
     // Camera
 
