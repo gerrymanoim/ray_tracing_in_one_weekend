@@ -1,15 +1,20 @@
 use crate::hittable::{HitRecord, Hittable};
 use crate::ray::Ray;
 use crate::vec3::{dot, Point3};
+use crate::material::Material;
+use std::rc::Rc;
 
 pub struct Sphere {
     center: Point3,
     radius: f32,
+    material: Rc<dyn Material>,
+
 }
 
 impl Sphere {
-    pub fn new(center: Point3, radius: f32) -> Sphere {
-        Sphere {center, radius}
+    // TODO - can I do something about these lifetimes?
+    pub fn new(center: Point3, radius: f32, material: Rc<dyn Material>) -> Sphere {
+        Sphere {center, radius, material}
     }
 }
 
@@ -36,7 +41,8 @@ impl Hittable for Sphere {
         let r = HitRecord::from_t_ray_outward_normal(
             root,
             &r,
-            &((r.at(root) - self.center) / self.radius)
+            &((r.at(root) - self.center) / self.radius),
+            self.material.clone() //cloning creates a new reference to the same heap
         );
 
         return Some(r);

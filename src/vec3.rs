@@ -23,6 +23,11 @@ impl Vec3 {
         self.x.powi(2) + self.y.powi(2) + self.z.powi(2)
     }
 
+    pub fn near_zero(&self) -> bool {
+        let tol = 1e-8;
+        self.x.abs() < tol && self.y.abs() < tol && self.z.abs() < tol
+    }
+
     pub fn random() -> Vec3 {
         Vec3 {
             x: random(),
@@ -191,8 +196,12 @@ pub fn random_in_unit_sphere() -> Vec3 {
     }
 }
 
-pub fn random_unti_vector() -> Vec3 {
+pub fn random_unit_vector() -> Vec3 {
     unit_vector(random_in_unit_sphere())
+}
+
+pub fn reflect(v: &Vec3, norm: &Vec3) -> Vec3 {
+    *v - *norm*2.0*dot(v, norm)
 }
 
 pub use Vec3 as Point3;
