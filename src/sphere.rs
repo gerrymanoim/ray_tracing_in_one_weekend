@@ -2,18 +2,19 @@ use crate::hittable::{HitRecord, Hittable};
 use crate::ray::Ray;
 use crate::vec3::{dot, Point3};
 use crate::material::Material;
-use std::rc::Rc;
+use std::sync::Arc;
+
 
 pub struct Sphere {
     center: Point3,
     radius: f32,
-    material: Rc<dyn Material>,
+    material: Arc<dyn Material + Sync + Send>,
 
 }
 
 impl Sphere {
     // TODO - can I do something about these lifetimes?
-    pub fn new(center: Point3, radius: f32, material: Rc<dyn Material>) -> Sphere {
+    pub fn new(center: Point3, radius: f32, material: Arc<dyn Material + Sync + Send>) -> Sphere {
         Sphere {center, radius, material}
     }
 }
