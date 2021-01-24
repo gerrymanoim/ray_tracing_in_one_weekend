@@ -15,7 +15,7 @@ pub struct Sphere {
 impl Sphere {
     // TODO - can I do something about these lifetimes?
     pub fn new(center: Point3, radius: f32, material: Arc<dyn Material + Sync + Send>) -> Sphere {
-        Sphere {center, radius, material}
+        Sphere {center, radius, material: material}
     }
 }
 

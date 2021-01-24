@@ -18,3 +18,8 @@ Surface normals are vectors perpendicular to to the surface at the point that we
 Here are normals are always outside normals, i.e. they face outward independently of whether the ray is coming from inside or outside.
 
 ![](https://raytracing.github.io/images/fig-1.06-normal-sides.jpg)
+
+Material names:
+    - lambertian: matte
+    - dielectrics: Clear materials such as water, glass, and diamonds
+    -

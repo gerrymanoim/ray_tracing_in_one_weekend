@@ -10,7 +10,7 @@ use camera::Camera;
 use color::{write_color, Color};
 use hittable::Hittable;
 use hittable_list::HittableList;
-use material::{Lambertian, Metal};
+use material::{Lambertian, Metal, Dielectric};
 use ray::Ray;
 use sphere::Sphere;
 use std::sync::Arc;
@@ -58,20 +58,19 @@ fn main() {
     // World
     let mut world = HittableList::new();
 
+    // TODO - I think my use of Arc is not correct
+
     // Materials
     let material_ground = Arc::new(Lambertian {
         albedo: Color::new(0.8, 0.8, 0.0),
     });
     let material_center = Arc::new(Lambertian {
-        albedo: Color::new(0.7, 0.3, 0.3),
+        albedo: Color::new(0.1, 0.2, 0.5),
     });
-    let material_left = Arc::new(Metal {
-        albedo: Color::new(0.8, 0.8, 0.8),
-        fuzz: 0.3,
-    });
+    let material_left = Arc::new(Dielectric { ir: 1.5});
     let material_right = Arc::new(Metal {
         albedo: Color::new(0.8, 0.6, 0.2),
-        fuzz: 1.0,
+        fuzz: 0.0,
     });
 
     // Objects in the world
@@ -88,7 +87,14 @@ fn main() {
     world.add(Arc::new(Sphere::new(
         Point3::new(-1.0, 0.0, -1.0),
         0.5,
-        material_left,
+        material_left.clone(),
+    )));
+    // this sphere has a negative radius so points inwards
+    // making a hollow glass sphere
+    world.add(Arc::new(Sphere::new(
+        Point3::new(-1.0, 0.0, -1.0),
+        -0.4,
+        material_left.clone(),
     )));
     world.add(Arc::new(Sphere::new(
         Point3::new(1.0, 0.0, -1.0),
