@@ -23,3 +23,22 @@ Material names:
     - lambertian: matte
     - dielectrics: Clear materials such as water, glass, and diamonds
     -
+
+Camera geometry
+
+![](https://raytracing.github.io/images/fig-1.14-cam-view-geom.jpg)
+
+And we also care about the orientation of the thing
+
+![](https://raytracing.github.io/images/fig-1.15-cam-view-dir.jpg)
+
+![](https://raytracing.github.io/images/fig-1.16-cam-view-up.jpg)
+
+`(u, v, w)` describes the camera orientation in space
+
+
+## TODO
+
+- [ ] Fix usage of arc
+- [ ] Refactor unit vector and refrecat - some things take values and some things take references
+- [ ]

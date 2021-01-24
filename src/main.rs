@@ -10,12 +10,12 @@ use camera::Camera;
 use color::{write_color, Color};
 use hittable::Hittable;
 use hittable_list::HittableList;
-use material::{Lambertian, Metal, Dielectric};
+use material::{Dielectric, Lambertian, Metal};
 use ray::Ray;
 use sphere::Sphere;
 use std::sync::Arc;
 
-use vec3::{unit_vector, Point3};
+use vec3::{unit_vector, Point3, Vec3};
 
 use rand::prelude::*;
 use rayon::prelude::*;
@@ -54,6 +54,7 @@ fn main() {
     let image_height = (image_width as f32 / aspect_ratio) as u32;
     let samples_per_pixel = 100;
     let max_depth = 50;
+    let r = (std::f32::consts::PI / 4.0).cos();
 
     // World
     let mut world = HittableList::new();
@@ -67,7 +68,7 @@ fn main() {
     let material_center = Arc::new(Lambertian {
         albedo: Color::new(0.1, 0.2, 0.5),
     });
-    let material_left = Arc::new(Dielectric { ir: 1.5});
+    let material_left = Arc::new(Dielectric { ir: 1.5 });
     let material_right = Arc::new(Metal {
         albedo: Color::new(0.8, 0.6, 0.2),
         fuzz: 0.0,
@@ -89,11 +90,12 @@ fn main() {
         0.5,
         material_left.clone(),
     )));
+
     // this sphere has a negative radius so points inwards
     // making a hollow glass sphere
     world.add(Arc::new(Sphere::new(
         Point3::new(-1.0, 0.0, -1.0),
-        -0.4,
+        -0.45,
         material_left.clone(),
     )));
     world.add(Arc::new(Sphere::new(
@@ -103,14 +105,13 @@ fn main() {
     )));
 
     // Camera
-
-    let viewport_height = 2.0;
-    let viewport_width = aspect_ratio * viewport_height;
-    // how far the plane is from the projection point
-    let focal_length = 1.0;
-
-    // Centered at 0,0,0 at the center of the image
-    let cam = Camera::new();
+    let cam = Camera::new(
+        Point3::new(-2.0, 2.0, 1.0),
+        Point3::new(0.0, 0.0, -1.0),
+        Vec3::new(0.0, 1.0, 0.0),
+        20.0,
+        aspect_ratio,
+    );
     // Render
 
     println!("P3\n{} {}\n255", image_width, image_height);
