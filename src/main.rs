@@ -9,11 +9,8 @@ mod vec3;
 use camera::Camera;
 use color::{write_color, Color};
 use hittable::Hittable;
-use hittable_list::HittableList;
-use material::{Dielectric, Lambertian, Metal};
+use hittable_list::random_scene;
 use ray::Ray;
-use sphere::Sphere;
-use std::sync::Arc;
 
 use vec3::{unit_vector, Point3, Vec3};
 
@@ -49,67 +46,23 @@ fn ray_color<T: Hittable>(r: &Ray, world: T, depth: u32) -> Color {
 fn main() {
     // Image
     // easier to not flip x, y if we use rectangle
-    let aspect_ratio = 16.0 / 9.0;
-    let image_width = 400;
+    let aspect_ratio = 3.0 / 2.0;
+    let image_width = 1200;
     let image_height = (image_width as f32 / aspect_ratio) as u32;
-    let samples_per_pixel = 100;
+    let samples_per_pixel = 500;
     let max_depth = 50;
-    let r = (std::f32::consts::PI / 4.0).cos();
 
     // World
-    let mut world = HittableList::new();
+    let world = random_scene();
 
     // TODO - I think my use of Arc is not correct
 
-    // Materials
-    let material_ground = Arc::new(Lambertian {
-        albedo: Color::new(0.8, 0.8, 0.0),
-    });
-    let material_center = Arc::new(Lambertian {
-        albedo: Color::new(0.1, 0.2, 0.5),
-    });
-    let material_left = Arc::new(Dielectric { ir: 1.5 });
-    let material_right = Arc::new(Metal {
-        albedo: Color::new(0.8, 0.6, 0.2),
-        fuzz: 0.0,
-    });
-
-    // Objects in the world
-    world.add(Arc::new(Sphere::new(
-        Point3::new(0.0, -100.5, -1.0),
-        100.0,
-        material_ground,
-    )));
-    world.add(Arc::new(Sphere::new(
-        Point3::new(0.0, 0.0, -1.0),
-        0.5,
-        material_center,
-    )));
-    world.add(Arc::new(Sphere::new(
-        Point3::new(-1.0, 0.0, -1.0),
-        0.5,
-        material_left.clone(),
-    )));
-
-    // this sphere has a negative radius so points inwards
-    // making a hollow glass sphere
-    world.add(Arc::new(Sphere::new(
-        Point3::new(-1.0, 0.0, -1.0),
-        -0.45,
-        material_left.clone(),
-    )));
-    world.add(Arc::new(Sphere::new(
-        Point3::new(1.0, 0.0, -1.0),
-        0.5,
-        material_right,
-    )));
-
     // Camera
-    let lookfrom = Point3::new(3.0, 3.0, 2.0);
-    let lookat = Point3::new(0.0, 0.0, -1.0);
+    let lookfrom = Point3::new(13.0, 2.0, 3.0);
+    let lookat = Point3::new(0.0, 0.0, 0.0);
     let vup = Vec3::new(0.0, 1.0, 0.0);
-    let dist_to_focus = (lookfrom - lookat).length();
-    let aperature = 2.0;
+    let dist_to_focus = 10.0;
+    let aperature = 0.1;
     let cam = Camera::new(
         lookfrom,
         lookat,

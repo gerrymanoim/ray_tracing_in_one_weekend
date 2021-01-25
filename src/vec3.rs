@@ -201,7 +201,7 @@ pub fn random_in_unit_disk() -> Vec3 {
     loop {
         let v = Vec3::new(rng.gen_range(-1.0..1.0), rng.gen_range(-1.0..1.0), 0.0);
         if v.length_squared() < 1.0 {
-            return v
+            return v;
         }
     }
 }

@@ -8,8 +8,8 @@ pub struct Ray {
 }
 
 impl Ray {
-    pub fn new (origin: Point3, direction: Vec3) -> Ray {
-        Ray {origin, direction}
+    pub fn new(origin: Point3, direction: Vec3) -> Ray {
+        Ray { origin, direction }
     }
     pub fn at(&self, t: f32) -> Point3 {
         self.origin + t * self.direction
